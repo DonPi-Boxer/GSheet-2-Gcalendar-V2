@@ -1,109 +1,89 @@
-// important variables in sheet:
-// var rangeCalendarName = "B1"
-// var rangeCalendarID = "F1"
-
-//// https://stackoverflow.com/questions/39319514/how-to-add-other-users-to-a-calendar
-
-// https://developers.google.com/apps-script/reference/calendar Build-in API Google Appsscrpt for Calendar
-
-///// Add participants to the calendar ?
-
-//// Note add user werk met deze 'rigide data; --> hoe pakken we dit uit naar een array ?
-//// moet nu iedereen de API opstarten ???
 
 
-
-function probeer() {
-var iDCalendar = SpreadsheetApp.getActiveSheet().getRange("D1").getValue();
-var calendar = CalendarApp.getCalendarById(iDCalendar);
-
-}
-
-// All relevant general variables are under here:
 
 var activesheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
 
 var dayIndex = 0;
-var eventIndex = 1;
-var startTimeIndex = 2;
-var endTimeIndex = 3;
+var startTimeIndex = 1;
+var endTimeIndex = 2;
+var eventIndex = 3;
 var locationIndex = 4;
 var descriptionIndex = 5;
 var teammemberIndex = 6;
-var colourIndex =7;
-var reminderIndex = 8;
-var aanpassingIndex = 9;
-var deletedornotIndex = 10;
-var eventIDIndex = 11;
+var colourIndex =9;
+// var reminderIndex = 8;
+var aanpassingIndex = 10;
+var deletedornotIndex = 11;
+var eventIDIndex = 12;
 
         
 // set timezone:
-  var timeZone = Session.getScriptTimeZone();
+var timeZone = Session.getScriptTimeZone();
 //Create varialbes for postions of: Calendar Name, link, Url description 
-var cellLinkCal = "C1";
-var cellIdCal = "E1";
+//var cellLinkCal = "C1";
+//var cellIdCal = "E1";
 var cellAddEditor = "J1";
 var cellAddViewer = "J2";
 
 
-var rangeDisplayCalendarName = "A1";
-var rangeCalendarName = "B1";
-var rangeUrl = "D1";
-var rangeCalendarID = "F1";
+// var rangeDisplayCalendarName = "A1";
+// var rangeCalendarName = "B1";
+// var rangeUrl = "D1";
+// var rangeCalendarID = "F1";
 
 //Dell from and to text
-var cellDelFromText = "A2";
-var cellDelToText = "C2";
+// var cellDelFromText = "A2";
+// var cellDelToText = "C2";
 //Dell from and to datet value
-var cellDeleFromValue = "B2";
-var cellDeleToValue = "D2";
+// var cellDeleFromValue = "B2";
+// var cellDeleToValue = "D2";
 // Set the names to put in abovestanding positions
-var setCalName= "Name Google Calendar: ";
-var setLinkCal = "Calendar link: ";
-var setLinkID = "Calendar ID: ";
-var setDelFrom = "Delete from: ";
-var setDelTo = "Delete until: ";
+// var setCalName= "Name Google Calendar: ";
+// var setLinkCal = "Calendar link: ";
+// var setLinkID = "Calendar ID: ";
+// var setDelFrom = "Delete from: ";
+// var setDelTo = "Delete until: ";
 var setAddEditor = "Add editors: " ;
 var setAddViewers = "Add viewers: ";
 
-var sheetname = SpreadsheetApp.getActiveSheet().getName();
+// var sheetname = SpreadsheetApp.getActiveSheet().getName();
 
 
 
 /// variables for adding editors and subscribers
-var firstCellOfMails = "L1";
+var firstCellOfMails = "B1";
 var firstMailCellRange = SpreadsheetApp.getActiveSheet().getRange(firstCellOfMails);
 var rowMailsIndex = 1;
-var firstMailCollumnIndex = 11;
+var firstMailCollumnIndex = 2;
 
 var rowsMailsIndexViewer = 2;
 
 var rowMailsA1 = 1;
-var firsCollumnMailsA1 = "L";
+var firsCollumnMailsA1 = "B";
 
 
 var startpointentries = "A5";
-var endcolumncalendarentries = "L";
+var endcolumncalendarentries = "M";
 
  
-var calendarName = activesheet.getRange(rangeCalendarName).getValue();
-var calendarId = activesheet.getRange(rangeCalendarID).getValue();
-
+// var calendarName = activesheet.getRange(rangeCalendarName).getValue();
+var calendarId = "c_f40d9e077a7839695b5ddab2921aa04bebb7b5de97078997fe1791fd685a101f@group.calendar.google.com";
+var calOutEvents = CalendarApp.getCalendarById(calendarId);
 
 //Create variables for positions of: Calendar entrie headers
 var cellDate = "A4";
-var cellEventName = "B4";
-var cellStart = "C4";
-var cellEnd = "D4";
+var cellStart = "B4";
+var cellEnd = "C4";
+var cellEventName = "D4";
 
 var cellLocation = "E4"
 var cellDescription = "F4"
 var teammembers = "G4"
-var colourdescription = "H4"
-var reminderdescription = "I4"
-var cellAChange = "J4";
-var cellDelete ="K4";
-var cellEventid = "L4";
+var colourdescription = "J4"
+// var reminderdescription = "I4"
+var cellAChange = "K4";
+var cellDelete ="L4";
+var cellEventid = "M4";
 
 // Set the names to put in abovestanding positions. NOte: how to put this in bolt ???
 var setDate = "Date: "
@@ -132,145 +112,145 @@ var setEventid = "Event ID: "
 
   
 
-// Set date DeleFrom and DeleteTo on the current date
-function createcalender()
-{
-/// Check if you already own this Calendar
-SpreadsheetApp.getActiveSpreadsheet().toast("Creating a new Google Calendar with the name: " + calendarName )
+// // Set date DeleFrom and DeleteTo on the current date
+// function createcalender()
+// {
+// /// Check if you already own this Calendar
+// SpreadsheetApp.getActiveSpreadsheet().toast("Creating a new Google Calendar with the name: " + calendarName )
 
-var newcal = CalendarApp.createCalendar(calendarName).setTimeZone(timeZone);
-var newcalId = newcal.getId();
-Logger.log(newcalId);
+// var newcal = CalendarApp.createCalendar(calendarName).setTimeZone(timeZone);
+// var newcalId = newcal.getId();
+// Logger.log(newcalId);
  
-//  Logger.log("The name of the Calendar belonging to the given ID is " + calendarId);
-  //set calendar link in cell D1
-var urlpart1 = "https://calendar.google.com/calendar/embed?src="
-var urltotal =  urlpart1 + newcalId;
-//  Logger.log("The link to the Calendar belonging to the specified Calendar is " + urltotal);
+// //  Logger.log("The name of the Calendar belonging to the given ID is " + calendarId);
+//   //set calendar link in cell D1
+// var urlpart1 = "https://calendar.google.com/calendar/embed?src="
+// var urltotal =  urlpart1 + newcalId;
+// //  Logger.log("The link to the Calendar belonging to the specified Calendar is " + urltotal);
 
-  //Set calendar Id in cell F1
+//   //Set calendar Id in cell F1
 
-//  Logger.log("The ID the Calendar belonging to the given ID is " + calendarId);
-
-
-/////PART OF THE SETLINKENIDINSHEET
-activesheet.getRange(rangeUrl).setValue(urltotal);
-activesheet.getRange(rangeCalendarID).setValue(newcalId);
-
-SpreadsheetApp.getActiveSpreadsheet().toast("A new Google Calendar with the name: " + calendarName + " is created.")
-
-}
+// //  Logger.log("The ID the Calendar belonging to the given ID is " + calendarId);
 
 
-function setformatofDelete() {
-activesheet.getRange(cellDeleFromValue).setNumberFormat("dd-mm-yyyy").setFontWeight("normal");
-activesheet.getRange(cellDeleToValue).setNumberFormat("dd-mm-yyyy").setFontWeight("normal");
-}
+// /////PART OF THE SETLINKENIDINSHEET
+// activesheet.getRange(rangeUrl).setValue(urltotal);
+// activesheet.getRange(rangeCalendarID).setValue(newcalId);
 
-function createsheet() {
-//get the activesheet
+// SpreadsheetApp.getActiveSpreadsheet().toast("A new Google Calendar with the name: " + calendarName + " is created.")
 
-
-setformatofDelete()
-
-// Set all variables in positions of the sheet. Here we set all header entries. Not the values themselves !
-activesheet.getRange(rangeDisplayCalendarName).setValue(setCalName).setFontWeight("bold")
-activesheet.getRange(cellLinkCal).setValue(setLinkCal).setFontWeight("bold");
-activesheet.getRange(cellIdCal).setValue(setLinkID).setFontWeight("bold");
-activesheet.getRange(cellDelFromText).setValue(setDelFrom).setFontWeight("bold");
-activesheet.getRange(cellDelToText).setValue(setDelTo).setFontWeight("bold");
-activesheet.getRange(cellDate).setValue(setDate).setFontWeight("bold");
-activesheet.getRange(cellStart).setValue(setCellStart).setFontWeight("bold");
-activesheet.getRange(cellEnd).setValue(setCellEnd).setFontWeight("bold");
-activesheet.getRange(cellEventName).setValue(setEventName).setFontWeight("bold");
-activesheet.getRange(cellLocation).setValue(setLocation).setFontWeight("bold");
-activesheet.getRange(cellDescription).setValue(setDescription).setFontWeight("bold");
-activesheet.getRange(teammembers).setValue(setTeaammembers).setFontWeight("bold");
-activesheet.getRange(colourdescription).setValue(setcolordesciptiion).setFontWeight("bold");
-activesheet.getRange(reminderdescription).setValue(setReminderdescription).setFontWeight("bold");
-activesheet.getRange(cellAChange).setValue(setChange).setFontWeight("bold");
-activesheet.getRange(cellDelete).setValue(setDelete).setFontWeight("bold");
-activesheet.getRange(cellEventid).setValue(setEventid).setFontWeight("bold");
+// }
 
 
-activesheet.getRange(cellAddEditor).setValue(setAddEditor).setFontWeight("bold");
-activesheet.getRange(cellAddViewer).setValue(setAddViewers).setFontWeight("bold");
+// function setformatofDelete() {
+// activesheet.getRange(cellDeleFromValue).setNumberFormat("dd-mm-yyyy").setFontWeight("normal");
+// activesheet.getRange(cellDeleToValue).setNumberFormat("dd-mm-yyyy").setFontWeight("normal");
+// }
 
-  // Set date DeleFrom and DeleteTo on the current date, such that those cell are not empty, thus the onOpenTrigger works properly
-  var deleDay = new Date();
+// function createsheet() {
+// //get the activesheet
+
+
+// setformatofDelete()
+
+// // Set all variables in positions of the sheet. Here we set all header entries. Not the values themselves !
+// activesheet.getRange(rangeDisplayCalendarName).setValue(setCalName).setFontWeight("bold")
+// activesheet.getRange(cellLinkCal).setValue(setLinkCal).setFontWeight("bold");
+// activesheet.getRange(cellIdCal).setValue(setLinkID).setFontWeight("bold");
+// activesheet.getRange(cellDelFromText).setValue(setDelFrom).setFontWeight("bold");
+// activesheet.getRange(cellDelToText).setValue(setDelTo).setFontWeight("bold");
+// activesheet.getRange(cellDate).setValue(setDate).setFontWeight("bold");
+// activesheet.getRange(cellStart).setValue(setCellStart).setFontWeight("bold");
+// activesheet.getRange(cellEnd).setValue(setCellEnd).setFontWeight("bold");
+// activesheet.getRange(cellEventName).setValue(setEventName).setFontWeight("bold");
+// activesheet.getRange(cellLocation).setValue(setLocation).setFontWeight("bold");
+// activesheet.getRange(cellDescription).setValue(setDescription).setFontWeight("bold");
+// activesheet.getRange(teammembers).setValue(setTeaammembers).setFontWeight("bold");
+// activesheet.getRange(colourdescription).setValue(setcolordesciptiion).setFontWeight("bold");
+// activesheet.getRange(reminderdescription).setValue(setReminderdescription).setFontWeight("bold");
+// activesheet.getRange(cellAChange).setValue(setChange).setFontWeight("bold");
+// activesheet.getRange(cellDelete).setValue(setDelete).setFontWeight("bold");
+// activesheet.getRange(cellEventid).setValue(setEventid).setFontWeight("bold");
+
+
+// activesheet.getRange(cellAddEditor).setValue(setAddEditor).setFontWeight("bold");
+// activesheet.getRange(cellAddViewer).setValue(setAddViewers).setFontWeight("bold");
+
+//   // Set date DeleFrom and DeleteTo on the current date, such that those cell are not empty, thus the onOpenTrigger works properly
+//   var deleDay = new Date();
  
-  var fomatteddate  = Utilities.formatDate(deleDay, timeZone,"yyyy-MM-dd");
-  var deledatestring = fomatteddate.substring(0,10);
+//   var fomatteddate  = Utilities.formatDate(deleDay, timeZone,"yyyy-MM-dd");
+//   var deledatestring = fomatteddate.substring(0,10);
 
-  // set right date formats + input this day as delete from and delete to
-  activesheet.getRange(cellDeleFromValue).setValue(deledatestring).setNumberFormat("dd-mm-yyyy");
-  activesheet.getRange(cellDeleToValue).setValue(deledatestring).setNumberFormat("dd-mm-yyyy");
+//   // set right date formats + input this day as delete from and delete to
+//   activesheet.getRange(cellDeleFromValue).setValue(deledatestring).setNumberFormat("dd-mm-yyyy");
+//   activesheet.getRange(cellDeleToValue).setValue(deledatestring).setNumberFormat("dd-mm-yyyy");
 
-  activesheet.getRange("A5:A").setNumberFormat("dd-mm-yyyy");
-  activesheet.getRange("C5:C").setNumberFormat("h:mm");
-  activesheet.getRange("D5:D").setNumberFormat("h:mm");
+//   activesheet.getRange("A5:A").setNumberFormat("dd-mm-yyyy");
+//   activesheet.getRange("C5:C").setNumberFormat("h:mm");
+//   activesheet.getRange("D5:D").setNumberFormat("h:mm");
 
-  activesheet.getRange("A:Z").setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+//   activesheet.getRange("A:Z").setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
 
-  /// Conditional formatting for color:
-  //var rule = new Array
-  /// rule[0] = "Definitive"
+//   /// Conditional formatting for color:
+//   //var rule = new Array
+//   /// rule[0] = "Definitive"
 
-activesheet.autoResizeColumn(1);
-activesheet.autoResizeColumn(2);
-
-
-// set dv vooor status agenda:
-
-/// Declare DV:
-    var dv = SpreadsheetApp.newDataValidation();
-    dv.setAllowInvalid(false);
-    dv.setHelpText("Choose an event status/color");
-    dv.requireValueInList(option, true);
-
-  activesheet.getRange(5, colourIndex+1).setDataValidation(dv);
-
-}
+// activesheet.autoResizeColumn(1);
+// activesheet.autoResizeColumn(2);
 
 
-function createTotalSheetAndCalendar () {
-createcalender()
-createsheet()
-}
+// // set dv vooor status agenda:
+
+// /// Declare DV:
+//     var dv = SpreadsheetApp.newDataValidation();
+//     dv.setAllowInvalid(false);
+//     dv.setHelpText("Choose an event status/color");
+//     dv.requireValueInList(option, true);
+
+//   activesheet.getRange(5, colourIndex+1).setDataValidation(dv);
+
+// }
+
+
+// function createTotalSheetAndCalendar () {
+// createcalender()
+// createsheet()
+// }
 
 // Change Name of the Calendar if this get's changed in the Google Sheet
-function alterCalendarName() {
+// function alterCalendarName() {
   
-  //declare variables: active sheet, cell of calendar ID, cell of Calendar name
+//   //declare variables: active sheet, cell of calendar ID, cell of Calendar name
   
  
 
-  // call the ID of the altered calendar. Call the agenda
-  var calendarId = activesheet.getRange(rangeCalendarID).getValue();
-  var alteredCalendar = CalendarApp.getCalendarById(calendarId);
+//   // call the ID of the altered calendar. Call the agenda
+//   var calendarId = activesheet.getRange(rangeCalendarID).getValue();
+//   var alteredCalendar = CalendarApp.getCalendarById(calendarId);
  
-  //get new name of the calendar
+//   //get new name of the calendar
   
-  var calendararrayTest = CalendarApp.getOwnedCalendarsByName(calendarName);
-Logger.log(calendararrayTest)
-if (calendararrayTest == 0) {
+//   var calendararrayTest = CalendarApp.getOwnedCalendarsByName(calendarName);
+// Logger.log(calendararrayTest)
+// if (calendararrayTest == 0) {
 
 
-  // set new name of the calendar in the Google Calendar
-  alteredCalendar.setName(calendarName);
+//   // set new name of the calendar in the Google Calendar
+//   alteredCalendar.setName(calendarName);
 
-  //popup: name of the calendar is changed to..
-  SpreadsheetApp.getActiveSpreadsheet().toast("The name of the Google Calendar is changed into: " + calendarName);
-}
-else {
-var ui = SpreadsheetApp.getUi();
-var response = ui.alert("'You already own a Google Calendar with the name '" + calendarName + "' please pick a different name and try again.", ui.ButtonSet.OK);
-SpreadsheetApp.getActiveSpreadsheet().toast("Changing the name of Google Calendar '" + calendarName + "' is canceled.")
+//   //popup: name of the calendar is changed to..
+//   SpreadsheetApp.getActiveSpreadsheet().toast("The name of the Google Calendar is changed into: " + calendarName);
+// }
+// else {
+// var ui = SpreadsheetApp.getUi();
+// var response = ui.alert("'You already own a Google Calendar with the name '" + calendarName + "' please pick a different name and try again.", ui.ButtonSet.OK);
+// SpreadsheetApp.getActiveSpreadsheet().toast("Changing the name of Google Calendar '" + calendarName + "' is canceled.")
 
-}
+// }
   
 
-}
+// }
 
 
 function addEditors() {
@@ -288,9 +268,9 @@ var lastMailCellRange = SpreadsheetApp.getActiveSheet().getRange(rowMailsIndex,l
 
 
 var totalAmmOfMails = (lastMailCollumnIndex - firstMailCollumnIndex +1);
-//Logger.log(totalAmmOfMails );
+Logger.log(totalAmmOfMails );
 var mailArray = SpreadsheetApp.getActiveSheet().getRange(rowMailsIndex,firstMailCollumnIndex,1, totalAmmOfMails).getValues();
-// Logger.log(mailArray);
+Logger.log("The mails are " + mailArray);
 var mailVector = mailArray[0];
 // Logger.log(mailVector);
 
@@ -336,8 +316,7 @@ for (j=0; j<addedUsers.length; j++) {
 
 var addedUsersString = addedUsersString + " " + addedUsers[j];
 }
-var calendarName = SpreadsheetApp.getActiveSheet().getRange(rangeCalendarName).getValue();
-SpreadsheetApp.getActiveSpreadsheet().toast("Editor invitation for '" + calendarName + "' is send to: "   +addedUsersString);
+SpreadsheetApp.getActiveSpreadsheet().toast("Editor invitation for is send to: "   +addedUsersString);
 }
 
 function addViewers() {
@@ -421,10 +400,10 @@ function zetActiviteitOpCalendar() {
   // get active sheet
   var spreadsheetevents = SpreadsheetApp.getActive().getActiveSheet();
   //get targeted calendar
-  var calendarIdevents = spreadsheetevents.getRange(rangeCalendarID).getValue();
-  Logger.log("calendar is " + calendarIdevents);
-  var calOutEvents = CalendarApp.getCalendarById(calendarIdevents);
-Logger.log("calendar is " + calOutEvents);
+  // var calendarIdevents = spreadsheetevents.getRange(rangeCalendarID).getValue();
+  // Logger.log("calendar is " + calendarIdevents);
+//   var calOutEvents = CalendarApp.getCalendarById(calendarIdevents);
+// Logger.log("calendar is " + calOutEvents);
   
 
   
@@ -481,7 +460,7 @@ Logger.log("calendar is " + calOutEvents);
       var description = shift[descriptionIndex];
       var teammembers = shift[teammemberIndex];
       var colour = shift[colourIndex];
-      var remindertime = 24 * 60* shift[reminderIndex];
+     // var remindertime = 24 * 60* shift[reminderIndex];
       var aanpassing = shift[aanpassingIndex];
       var deletedornot = shift[deletedornotIndex];
       var eventID = shift[eventIDIndex];
@@ -493,7 +472,7 @@ Logger.log("event is" + event);
 Logger.log("location is " + location);
 Logger.log("description is" + description);
 Logger.log("colour is" + colour);
-Logger.log("remindertime is" + remindertime);
+// Logger.log("remindertime is" + remindertime);
 Logger.log("aanpassing is" + aanpassing);
 Logger.log("deletedornot is" + deletedornot);
 Logger.log("event Id is" + eventID);
@@ -538,7 +517,8 @@ activesheet.getRange((5 + x - numberdeletedevents), colourIndex+1).setDataValida
    
 
   // If statement: voeg Id toe bij ieder toegevoet event. If no eventId en hele dag --> add new alldayevent. Alsook geen description --> zonder description
-  if (eventID == "" && startTime == "" && event != ""){
+  //Als starttijd is string (i.e. tbd ) --> maak hele dag event
+  if (eventID == "" && startTime == "" && event != "" || eventID == "" && typeof(startTime) ==="string" && event != "" ){
 
 
 /// Declaren reminder time:
@@ -614,16 +594,18 @@ newDagEvent.setColor(colourValue);
 
 }
 
-if (remindertime > 0) {
-  newDagEvent.addEmailReminder(remindertime);
-  newDagEvent.addPopupReminder(remindertime);
-  }
-  }
+// if (remindertime > 0) {
+//   newDagEvent.addEmailReminder(remindertime);
+//   newDagEvent.addPopupReminder(remindertime);
+//   }
+ }
 
     else if (eventID == "" && startTime != "" && event != "") { // Check the event doesn't exist
   // ALs event ID bestaat niet en is niet hele dag --> create specific time ID
 
   
+
+
   /// Declareren kleurindex:
        
     //Correctly format date and time  
@@ -639,14 +621,22 @@ if (remindertime > 0) {
         var eventStartDate = new Date(eventStartString);
         Logger.log("eventstart is " + eventStartDate);
 
+        //If an endtime is given, use that endtime
+        if (endTime != ""){
+        ///Format end
+          var formattedendttime = Utilities.formatDate(endTime, timeZone, "HH:mm:ss");
+          var timeendstring = formattedendttime.substring(0,7);
+          var eventEndString = (datestring + " " + timeendstring);
+          var eventEndDate = new Date(eventEndString);
 
-       ///Format end
-        var formattedendttime = Utilities.formatDate(endTime, timeZone, "HH:mm:ss");
-        var timeendstring = formattedendttime.substring(0,7);
-        var eventEndString = (datestring + " " + timeendstring);
-        var eventEndDate = new Date(eventEndString);
+          Logger.log("event end is " + eventEndDate);
+        }
 
-         Logger.log("event end is " + eventEndDate);
+        //If not endtime is given, assume the end time to be the same as the start time
+        if (endTime == "") {
+        var eventEndDate = eventStartDate
+        }
+       
 
         if ((description == "") &&  (teammembers == "")) {
     // Create new event: set aanpassing op nee, set verwijder op nee, set new ID
@@ -703,10 +693,10 @@ if (remindertime > 0) {
       newEvent.setColor(colourValue);
  }
 
-      if (remindertime > 0) {
-        newEvent.addEmailReminder(remindertime);
-        newEvent.addPopupReminder(remindertime);
-        }
+      // if (remindertime > 0) {
+      //   newEvent.addEmailReminder(remindertime);
+      //   newEvent.addPopupReminder(remindertime);
+      //   }
         
 
       }
@@ -729,56 +719,56 @@ if (remindertime > 0) {
       activesheet.getRange(5 + x - numberdeletedevents, aanpassingIndex+1).setValue("false");
       activesheet.getRange(5 + x - numberdeletedevents, deletedornotIndex+1).setValue("false");
       activesheet.getRange(5 + x - numberdeletedevents, eventIDIndex+1).setValue(alteredDagEventID).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
-  var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
-  var datestring = fomatteddate.substring(0,10);
-  SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
-  var numberaddedevents = (numberaddedevents+1);
+      var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
+      var datestring = fomatteddate.substring(0,10);
+      SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
+      var numberaddedevents = (numberaddedevents+1);
         
         }
 
        else if (description != "" && teammembers == "") {
-  var teammembersTot = setTeaammembers + "\n" + teammembers;
-  var alteredDagEvent = calOutEvents.createAllDayEvent(event, day, {description: teammembersTot, location: location} );
-  var alteredDagEventID = alteredDagEvent.getId();
-  activesheet.getRange(5 + x - numberdeletedevents, aanpassingIndex+1).setValue("false");
-  activesheet.getRange(5 + x - numberdeletedevents, deletedornotIndex+1).setValue("false");
-  activesheet.getRange(5 + x - numberdeletedevents, eventIDIndex+1).setValue(alteredDagEventID).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
-  var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
-  var datestring = fomatteddate.substring(0,10);
-  SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
-  var numberaddedevents = (numberaddedevents+1);
-      
+        var teammembersTot = setTeaammembers + "\n" + teammembers;
+        var alteredDagEvent = calOutEvents.createAllDayEvent(event, day, {description: teammembersTot, location: location} );
+        var alteredDagEventID = alteredDagEvent.getId();
+        activesheet.getRange(5 + x - numberdeletedevents, aanpassingIndex+1).setValue("false");
+        activesheet.getRange(5 + x - numberdeletedevents, deletedornotIndex+1).setValue("false");
+        activesheet.getRange(5 + x - numberdeletedevents, eventIDIndex+1).setValue(alteredDagEventID).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+        var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
+        var datestring = fomatteddate.substring(0,10);
+        SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
+        var numberaddedevents = (numberaddedevents+1);
+            
         }
 
         
       else  if (description == "" && teammembers != "") {
-     var alteredDagEvent = calOutEvents.createAllDayEvent(event, day, {description: teammembers, location: location} );
-       var  alteredDagEventID = alteredEvent.getId();
-     
+        var alteredDagEvent = calOutEvents.createAllDayEvent(event, day, {description: teammembers, location: location} );
+        var  alteredDagEventID = alteredEvent.getId();
+        
         //Logger + counter
-  activesheet.getRange(5 + x - numberdeletedevents, aanpassingIndex+1).setValue("false");
-  activesheet.getRange(5 + x - numberdeletedevents, deletedornotIndex+1).setValue("false");
-  activesheet.getRange(5 + x - numberdeletedevents, eventIDIndex+1).setValue(alteredDagEventID).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
-  var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
-  var datestring = fomatteddate.substring(0,10);
-  SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
-  var numberaddedevents = (numberaddedevents+1);
-        }
+        activesheet.getRange(5 + x - numberdeletedevents, aanpassingIndex+1).setValue("false");
+        activesheet.getRange(5 + x - numberdeletedevents, deletedornotIndex+1).setValue("false");
+        activesheet.getRange(5 + x - numberdeletedevents, eventIDIndex+1).setValue(alteredDagEventID).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+        var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
+        var datestring = fomatteddate.substring(0,10);
+        SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
+        var numberaddedevents = (numberaddedevents+1);
+          }
 
       else  if (description != "" && teammembers != "") {
         var totaldescription =  setTeaammembers + "\n" + teammembers + "\n" + "Description of event:" + "\n" + description;
-       var alteredDagEvent = calOutEvents.createAllDayEvent(event, day, {description: totaldescription, location: location} );
-      var alteredDagEventID = alteredDagEvent.getId();
+        var alteredDagEvent = calOutEvents.createAllDayEvent(event, day, {description: totaldescription, location: location} );
+        var alteredDagEventID = alteredDagEvent.getId();
  
-        //Logger + counter 
-  activesheet.getRange(5 + x - numberdeletedevents, aanpassingIndex+1).setValue("false");
-  activesheet.getRange(5 + x - numberdeletedevents, deletedornotIndex+1).setValue("false");
-  activesheet.getRange(5 + x - numberdeletedevents, eventIDIndex+1).setValue(alteredDagEventID).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
-  var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
-  var datestring = fomatteddate.substring(0,10);
-  SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
-  var numberaddedevents = (numberaddedevents+1);
-      
+            //Logger + counter 
+        activesheet.getRange(5 + x - numberdeletedevents, aanpassingIndex+1).setValue("false");
+        activesheet.getRange(5 + x - numberdeletedevents, deletedornotIndex+1).setValue("false");
+        activesheet.getRange(5 + x - numberdeletedevents, eventIDIndex+1).setValue(alteredDagEventID).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+        var fomatteddate  = Utilities.formatDate(day, timeZone,"yyyy-MM-dd"); 
+        var datestring = fomatteddate.substring(0,10);
+        SpreadsheetApp.getActiveSpreadsheet().toast("Event " + event + " is altered. It is set for the whole day on " + datestring);
+        var numberaddedevents = (numberaddedevents+1);
+        
         }
 
     
@@ -789,10 +779,10 @@ if (remindertime > 0) {
       alteredDagEvent.setColor(colourValue);
  }
 
-      if (remindertime > 0) {
-        alteredDagEvent.addEmailReminder(remindertime);
-        alteredDagEvent.addPopupReminder(remindertime);
-        }
+      // if (remindertime > 0) {
+      //   alteredDagEvent.addEmailReminder(remindertime);
+      //   alteredDagEvent.addPopupReminder(remindertime);
+      //   }
 
       
     }
@@ -810,12 +800,23 @@ if (remindertime > 0) {
         var datestring = fomatteddate.substring(0,10);
         var formattedstarttime = Utilities.formatDate(startTime, timeZone, "HH:mm:ss");
         var timestartstring = formattedstarttime.substring(0,7);
+
+        var eventStartString = (datestring + " " + timestartstring);
+        var eventStartDate = new Date(eventStartString);
+
+        if (endTime != ""){
         var formattedendttime = Utilities.formatDate(endTime, timeZone, "HH:mm:ss");
         var timeendstring = formattedendttime.substring(0,7);
-        var  eventStartString = (datestring + " " + timestartstring);
-        var  eventEndString = (datestring + " " + timeendstring);
-        var eventStartDate = new Date(eventStartString);
+        var eventEndString = (datestring + " " + timeendstring);
         var eventEndDate = new Date(eventEndString);
+        }
+
+        if (endTime == ""){
+          eventEndDate == eventStartDate
+        }
+
+     
+      
         var deletedEvent = calOutEvents.getEventById(eventID);
         deletedEvent.deleteEvent(); 
 
@@ -876,10 +877,10 @@ alteredEvent.setColor(colourValue);
 
 }
 
-if (remindertime > 0) {
-       alteredEvent.addEmailReminder(remindertime);
-      alteredEvent.addPopupReminder(remindertime);
-  }
+// if (remindertime > 0) {
+//        alteredEvent.addEmailReminder(remindertime);
+//       alteredEvent.addPopupReminder(remindertime);
+//   }
         
         
 var alteredEventId = alteredEvent.getId();
@@ -892,10 +893,10 @@ var alteredEventId = alteredEvent.getId();
       alteredEvent.setColor(colourValue);
       }
 
-      if (remindertime > 0) {
-        alteredEvent.addEmailReminder(remindertime);
-        alteredEvent.addPopupReminder(remindertime);
-        }
+      // if (remindertime > 0) {
+      //   alteredEvent.addEmailReminder(remindertime);
+      //   alteredEvent.addPopupReminder(remindertime);
+      //   }
 
 
     }
@@ -956,163 +957,163 @@ if (numberdeletedevents >0 ){
 //// NOTE: cleart niet van tot en met maar van+1 tot: hoe fiksen we dit ??? 
 //// Later zorg !
 // Clear de Activiteiten calendar
-function clearCalendarActiviteiten() {
+// function clearCalendarActiviteiten() {
 
-    var fromDate = activesheet.getRange("B2").getValue();
-  var toDate = activesheet.getRange("D2").getValue();
+//     var fromDate = activesheet.getRange("B2").getValue();
+//   var toDate = activesheet.getRange("D2").getValue();
 
-   var fomatteddateFrom  = Utilities.formatDate(fromDate, timeZone,"yyyy-MM-dd");
-        var fromDatestring = fomatteddateFrom.substring(0,10);
+//    var fomatteddateFrom  = Utilities.formatDate(fromDate, timeZone,"yyyy-MM-dd");
+//         var fromDatestring = fomatteddateFrom.substring(0,10);
 
-var fomatteddateTo  = Utilities.formatDate(toDate, timeZone,"yyyy-MM-dd");
-        var toDatestring = fomatteddateTo.substring(0,10);
+// var fomatteddateTo  = Utilities.formatDate(toDate, timeZone,"yyyy-MM-dd");
+//         var toDatestring = fomatteddateTo.substring(0,10);
 
-  var ui = SpreadsheetApp.getUi();
-  var response = ui.alert("Are you sure you want to clear all activitities in Calendar '" + calendarName + "' from " + fromDatestring + " to " + toDatestring , ui.ButtonSet.YES_NO);
+//   var ui = SpreadsheetApp.getUi();
+//   var response = ui.alert("Are you sure you want to clear all activitities in Calendar '" + calendarName + "' from " + fromDatestring + " to " + toDatestring , ui.ButtonSet.YES_NO);
 
-  // Welke calendar ?
+//   // Welke calendar ?
 
-  if (response == ui.Button.NO)
-{
-  return
-}  
-else {
-  var spreadsheetevents = SpreadsheetApp.getActive().getActiveSheet();
-  //get targeted calendar
-  var calendarIdevents = spreadsheetevents.getRange("F1").getValue();
-  var calOutEvents = CalendarApp.getCalendarById(calendarIdevents);
-  // Welke dagen ? Note afhaneklijkheid van range als gegeven in Variabele spreadsheet !
+//   if (response == ui.Button.NO)
+// {
+//   return
+// }  
+// else {
+//   var spreadsheetevents = SpreadsheetApp.getActive().getActiveSheet();
+//   //get targeted calendar
+//   var calendarIdevents = spreadsheetevents.getRange("F1").getValue();
+//   var calOutEvents = CalendarApp.getCalendarById(calendarIdevents);
+//   // Welke dagen ? Note afhaneklijkheid van range als gegeven in Variabele spreadsheet !
 
 
-  var numberofdeleted = 0;
-  // Ga door list event en delete elk individueel event
-  var events = calOutEvents.getEvents(fromDate, toDate);
-  for(var i=0; i<events.length;i++){
-    var ev = events[i];
-        ev.deleteEvent();
-        var numberofdeleted = (numberofdeleted+1);
-      }
-    SpreadsheetApp.getActiveSpreadsheet().toast("Deleted  " + numberofdeleted + " event. Between the date " + fromDatestring + " and " + toDatestring);
-}
-  }
+//   var numberofdeleted = 0;
+//   // Ga door list event en delete elk individueel event
+//   var events = calOutEvents.getEvents(fromDate, toDate);
+//   for(var i=0; i<events.length;i++){
+//     var ev = events[i];
+//         ev.deleteEvent();
+//         var numberofdeleted = (numberofdeleted+1);
+//       }
+//     SpreadsheetApp.getActiveSpreadsheet().toast("Deleted  " + numberofdeleted + " event. Between the date " + fromDatestring + " and " + toDatestring);
+// }
+//   }
 
 /// Clear alle activiteiten uit de sheet van tot en met de gegeven datum. Note: nu bewegen we door van tm datum de IDs in de calendar te vinden en deze te zoeken in de sheet: als gevonden --> delete. Kan wellicht sneller door ook gewoon door de datums heen te loopen in de sheet zelf ?
-function clearsheet()
+// function clearsheet()
 
-{
+// {
 
-  // Get spreadsheet. Get range of events. Get timezone
-//var timeZone = Session.getScriptTimeZone();
-  var spreadsheetevents = SpreadsheetApp.getActive().getActiveSheet();
-  var rangeevents = spreadsheetevents.getLastRow();
-  var sheetname = SpreadsheetApp.getActiveSheet().getName();
+//   // Get spreadsheet. Get range of events. Get timezone
+// //var timeZone = Session.getScriptTimeZone();
+//   var spreadsheetevents = SpreadsheetApp.getActive().getActiveSheet();
+//   var rangeevents = spreadsheetevents.getLastRow();
+//   var sheetname = SpreadsheetApp.getActiveSheet().getName();
 
-  // Count numbers of rows that have been deleted, so we van adjust for that in our sheet when we need to delete a 2nd row
-  var alreadydeleted = 0;
+//   // Count numbers of rows that have been deleted, so we van adjust for that in our sheet when we need to delete a 2nd row
+//   var alreadydeleted = 0;
 
-  // get dates inbetween we want to clear. Set right format
-  var fromDate = spreadsheetevents.getRange("B2").getValue();
-  var toDate = spreadsheetevents.getRange("D2").getValue();
+//   // get dates inbetween we want to clear. Set right format
+//   var fromDate = spreadsheetevents.getRange("B2").getValue();
+//   var toDate = spreadsheetevents.getRange("D2").getValue();
 
-  var fomatteddateFrom  = Utilities.formatDate(fromDate, timeZone,"yyyy-MM-dd");
-        var fromDatestring = fomatteddateFrom.substring(0,10);
+//   var fomatteddateFrom  = Utilities.formatDate(fromDate, timeZone,"yyyy-MM-dd");
+//         var fromDatestring = fomatteddateFrom.substring(0,10);
 
-var fomatteddateTo  = Utilities.formatDate(toDate, timeZone,"yyyy-MM-dd");
-        var toDatestring = fomatteddateTo.substring(0,10);
+// var fomatteddateTo  = Utilities.formatDate(toDate, timeZone,"yyyy-MM-dd");
+//         var toDatestring = fomatteddateTo.substring(0,10);
 
- var ui = SpreadsheetApp.getUi();
-   var response = ui.alert("Are you sure you want to clear all activitities in this sheet '" + sheetname + "' from " + fromDatestring + " to " + toDatestring , ui.ButtonSet.YES_NO);
+//  var ui = SpreadsheetApp.getUi();
+//    var response = ui.alert("Are you sure you want to clear all activitities in this sheet '" + sheetname + "' from " + fromDatestring + " to " + toDatestring , ui.ButtonSet.YES_NO);
 
-     if (response == ui.Button.NO)
-{
-  return
-} 
+//      if (response == ui.Button.NO)
+// {
+//   return
+// } 
 
 
-else {
-  //Set right format
-  var formatFromdate = new Date(fromDate).getTime();
-  var formatTodate = new Date(toDate).getTime();
+// else {
+//   //Set right format
+//   var formatFromdate = new Date(fromDate).getTime();
+//   var formatTodate = new Date(toDate).getTime();
 
-//  Logger.log("fromdate is " + fromDate);
-//  Logger.log("fromdatestring is " + fromDatestring);
-//  Logger.log("formatFromdate is " + formatFromdate);
-//  Logger.log("toDate is " + toDate);
-//  Logger.log("todatestring is " + toDatestring);
-//  Logger.log("formatFromdate is " + formatTodate);
+// //  Logger.log("fromdate is " + fromDate);
+// //  Logger.log("fromdatestring is " + fromDatestring);
+// //  Logger.log("formatFromdate is " + formatFromdate);
+// //  Logger.log("toDate is " + toDate);
+// //  Logger.log("todatestring is " + toDatestring);
+// //  Logger.log("formatFromdate is " + formatTodate);
 
-  /// Get the dates of ALL events in the spreadsheet
-  var datesofAllEvents = spreadsheetevents.getRange("A5:A" + rangeevents).getValues();
- // Logger.log("datesofAllevents is " + datesofAllEvents);
+//   /// Get the dates of ALL events in the spreadsheet
+//   var datesofAllEvents = spreadsheetevents.getRange("A5:A" + rangeevents).getValues();
+//  // Logger.log("datesofAllevents is " + datesofAllEvents);
 
-  /// Check for each individual date whether it is in between from and todate --> if yes: delete from sheet
-  for (i=0; i<datesofAllEvents.length; i++) {
-    // Get date of this iteration
-    var dateofi = datesofAllEvents[i];
+//   /// Check for each individual date whether it is in between from and todate --> if yes: delete from sheet
+//   for (i=0; i<datesofAllEvents.length; i++) {
+//     // Get date of this iteration
+//     var dateofi = datesofAllEvents[i];
 
-    var formatDateofi = new Date(dateofi).getTime();
- //   Logger.log("todatestring is " + dateofistring);
-//  Logger.log("formatdateofI is " + formatDateofi);
+//     var formatDateofi = new Date(dateofi).getTime();
+//  //   Logger.log("todatestring is " + dateofistring);
+// //  Logger.log("formatdateofI is " + formatDateofi);
       
-        if (formatDateofi <= formatTodate && formatDateofi >= formatFromdate) {
+//         if (formatDateofi <= formatTodate && formatDateofi >= formatFromdate) {
          
-        Logger.log("event on this time gets deleted out sheet " + formatDateofi);
+//         Logger.log("event on this time gets deleted out sheet " + formatDateofi);
         
-        // -already deleted makes sure that we keep the rows up to date to  their actual number after being deleted
-        spreadsheetevents.deleteRow(5 + i - alreadydeleted);
-        // Count the number of times something has been deleted: adjust the deleterow statement above for this such that rows get updated to their 
-        // new position
-        var alreadydeleted = (alreadydeleted + 1);
-      }
-  }
-  Logger.log("Number of deleted events is " +  alreadydeleted);
-}
-}
+//         // -already deleted makes sure that we keep the rows up to date to  their actual number after being deleted
+//         spreadsheetevents.deleteRow(5 + i - alreadydeleted);
+//         // Count the number of times something has been deleted: adjust the deleterow statement above for this such that rows get updated to their 
+//         // new position
+//         var alreadydeleted = (alreadydeleted + 1);
+//       }
+//   }
+//   Logger.log("Number of deleted events is " +  alreadydeleted);
+// }
+// }
   
  
   
   
 
-function clearSheetenCalendar() {
+// function clearSheetenCalendar() {
 
-clearCalendarActiviteiten()
-clearsheet()
+// clearCalendarActiviteiten()
+// clearsheet()
 
-}
+// }
 
-function deleteCalendar() {
+// function deleteCalendar() {
 
-  var ui = SpreadsheetApp.getUi();
-   var response = ui.alert("Are you sure you want to delete Google Calendar:" + calendarName , ui.ButtonSet.YES_NO);
+//   var ui = SpreadsheetApp.getUi();
+//    var response = ui.alert("Are you sure you want to delete Google Calendar:" + calendarName , ui.ButtonSet.YES_NO);
 
-     if (response == ui.Button.NO)
-{
-  return
-} 
+//      if (response == ui.Button.NO)
+// {
+//   return
+// } 
 
-else {
-CalendarApp.getCalendarById(calendarId).deleteCalendar();
-}
-}
+// else {
+// CalendarApp.getCalendarById(calendarId).deleteCalendar();
+// }
+// }
 
-function deleteSheet ()  {
+// function deleteSheet ()  {
 
   
-    var ui = SpreadsheetApp.getUi();
-   var response = ui.alert("Are you sure you want to delete Google Sheet:" + sheetname  , ui.ButtonSet.YES_NO);
+//     var ui = SpreadsheetApp.getUi();
+//    var response = ui.alert("Are you sure you want to delete Google Sheet:" + sheetname  , ui.ButtonSet.YES_NO);
 
-     if (response == ui.Button.NO)
-{
-  SpreadsheetApp.getActiveSpreadsheet().toast("Deletetion of Google Sheet '" + sheetname + "' is canceled.")
-  return
-} 
-SpreadsheetApp.getActiveSpreadsheet().deleteActiveSheet();
-}
+//      if (response == ui.Button.NO)
+// {
+//   SpreadsheetApp.getActiveSpreadsheet().toast("Deletetion of Google Sheet '" + sheetname + "' is canceled.")
+//   return
+// } 
+// SpreadsheetApp.getActiveSpreadsheet().deleteActiveSheet();
+// }
 
-function deleteSheetEnCalendar() {
-deleteSheet()
-deleteCalendar()
-}
+// function deleteSheetEnCalendar() {
+// deleteSheet()
+// deleteCalendar()
+// }
 
 /// Note: add ui submenu with: change name of calendar
 
@@ -1126,80 +1127,83 @@ deleteCalendar()
 // function setGUISync(nameCalendar) {
   function setGUISync() {
 
-  var nameCalendar = SpreadsheetApp.getActive().getActiveSheet().getRange(rangeCalendarName).getValue();
-  var namesheet = SpreadsheetApp.getActive().getActiveSheet().getName();
-  var timeZone = Session.getScriptTimeZone();
+  // var nameCalendar = SpreadsheetApp.getActive().getActiveSheet().getRange(rangeCalendarName).getValue();
+  // var namesheet = SpreadsheetApp.getActive().getActiveSheet().getName();
+  // var timeZone = Session.getScriptTimeZone();
 
   //set submenu 1) Sync
-  var subMenusync = SpreadsheetApp.getUi().createMenu("Update Calendar")
-    .addItem("Update activities to Google Calendar '" + calendarName + " ", 'zetActiviteitOpCalendar') 
+  
     
   //set submenu 2) Clear
   /// dit is voor input van tot wanneer er gecleard wordt.
-  var spreadsheetevents = SpreadsheetApp.getActive().getActiveSheet();
+  // var spreadsheetevents = SpreadsheetApp.getActive().getActiveSheet();
 //  var spreadsheet = SpreadsheetApp.getActive().getSheetByName("Variabelen voor script");
 
-  var fromDate = spreadsheetevents.getRange(cellDeleFromValue).getValue();
-  var toDate = spreadsheetevents.getRange(cellDeleToValue).getValue();
-  // format from en to data voor implementatie in gui
+  // var fromDate = spreadsheetevents.getRange(cellDeleFromValue).getValue();
+  // var toDate = spreadsheetevents.getRange(cellDeleToValue).getValue();
+  // // format from en to data voor implementatie in gui
 
-  var fromfomatteddate  = Utilities.formatDate(fromDate, timeZone,"dd-MM-yyyy");
-  var fromdategui = fromfomatteddate.substring(0,10);
-  var tofomatteddate  = Utilities.formatDate(toDate, timeZone,"dd-MM-yyy");
-  var todategui = tofomatteddate.substring(0,10);
-  //Declare variabelen voor in de gui
-  var subMenuclear = SpreadsheetApp.getUi().createMenu("Clear Calendar")
-    .addItem("Clear Google Sheet from " +fromdategui + ' to ' + todategui , 'clearsheet')
-    .addItem("Clear Google Calendar from " + fromdategui + ' to ' + todategui , 'clearCalendarActiviteiten')
-    .addItem("Clear Google Sheet and Google Calendar from " + fromdategui + " to " + todategui , 'clearSheetenCalendar')
+  // var fromfomatteddate  = Utilities.formatDate(fromDate, timeZone,"dd-MM-yyyy");
+  // var fromdategui = fromfomatteddate.substring(0,10);
+  // var tofomatteddate  = Utilities.formatDate(toDate, timeZone,"dd-MM-yyy");
+  // var todategui = tofomatteddate.substring(0,10);
+  // //Declare variabelen voor in de gui
+  // var subMenuclear = SpreadsheetApp.getUi().createMenu("Clear Calendar")
+  //   .addItem("Clear Google Sheet from " +fromdategui + ' to ' + todategui , 'clearsheet')
+  //   .addItem("Clear Google Calendar from " + fromdategui + ' to ' + todategui , 'clearCalendarActiviteiten')
+  //   .addItem("Clear Google Sheet and Google Calendar from " + fromdategui + " to " + todategui , 'clearSheetenCalendar')
+
+  var submenuEditor = SpreadsheetApp.getUi().createMenu("Add users to calendar")
+  .addItem("Add editors to calendar", 'addEditors')
+  .addItem("Add viewers to calendar ", 'addViewers')
 
   //creeer totaal menu en zet de submenu's er in 
   var ui = SpreadsheetApp.getUi();
     ui.createMenu('Sync Google Calendar')
     //Reference submenu
-    .addSubMenu(subMenusync)
+    .addItem("Update events to GCalendar", 'zetActiviteitOpCalendar') 
     .addSeparator()
-    .addSubMenu(subMenuclear)
-    .addToUi()
-}
-
-function setGuiManage() {
-
-    /// Nieuwe ui hieronder:
-    /// Note: naam van Calendar update nu niet automatisch --> add onedit ?
-var nameCalendar = SpreadsheetApp.getActive().getActiveSheet().getRange(rangeCalendarName).getValue();
-var namesheet = SpreadsheetApp.getActive().getActiveSheet().getName();
-    
-    var subMenuCreate = SpreadsheetApp.getUi().createMenu("Create calendar")
-    .addItem("Create calendar with name: " + nameCalendar, 'createTotalSheetAndCalendar') 
-
-    var subMenuChangeName = SpreadsheetApp.getUi().createMenu("Change name of the calendar")
-    .addItem("Change the name of the calendar into: " + nameCalendar, 'alterCalendarName')
-
-    var subMenuDelete = SpreadsheetApp.getUi().createMenu("Delete")
-    .addItem("Delete calendar '" + nameCalendar + "'" , 'deleteCalendar')
-    .addItem("Delete sheet '" + namesheet + "'", 'deleteSheet')
-    .addItem("Delete calendar '" + nameCalendar + "' and sheet '" + namesheet + "'", 'deleteSheetEnCalendar')
-
-  var submenuEditor = SpreadsheetApp.getUi().createMenu("Add users to calendar")
-    .addItem("Add editors to calendar '" + nameCalendar + "'", "addEditors")
-    .addItem("Add viewers to calendar '" + nameCalendar + "'", "addViewers")
-  var ui2 = SpreadsheetApp.getUi();
-    ui2.createMenu('Manage Google Calendar')
-    .addSubMenu(subMenuCreate)
-    .addSubMenu(subMenuChangeName)
     .addSubMenu(submenuEditor)
-    .addSeparator()
-    .addSubMenu(subMenuDelete)
     .addToUi()
 }
 
-// function setGUIs(nameCalendar) {
-  function setGUIs() {
-setGuiManage()
-setGUISync()
+// function setGuiManage() {
 
-}
+//     /// Nieuwe ui hieronder:
+//     /// Note: naam van Calendar update nu niet automatisch --> add onedit ?
+// // var nameCalendar = SpreadsheetApp.getActive().getActiveSheet().getRange(rangeCalendarName).getValue();
+// // var namesheet = SpreadsheetApp.getActive().getActiveSheet().getName();
+    
+//     // var subMenuCreate = SpreadsheetApp.getUi().createMenu("Create calendar")
+//     // .addItem("Create calendar with name: " + nameCalendar, 'createTotalSheetAndCalendar') 
+
+//     // var subMenuChangeName = SpreadsheetApp.getUi().createMenu("Change name of the calendar")
+//     // .addItem("Change the name of the calendar into: " + nameCalendar, 'alterCalendarName')
+
+//     // var subMenuDelete = SpreadsheetApp.getUi().createMenu("Delete")
+//     // .addItem("Delete calendar '" + nameCalendar + "'" , 'deleteCalendar')
+//     // .addItem("Delete sheet '" + namesheet + "'", 'deleteSheet')
+//     // .addItem("Delete calendar '" + nameCalendar + "' and sheet '" + namesheet + "'", 'deleteSheetEnCalendar')
+
+//   var submenuEditor = SpreadsheetApp.getUi().createMenu("Add users to calendar")
+//     .addItem("Add editors to calendar ")
+//     .addItem("Add viewers to calendar ")
+//     var ui2 = SpreadsheetApp.getUi();
+//     ui2.createMenu('Manage Google Calendar')
+//     // .addSubMenu(subMenuCreate)
+//     // .addSubMenu(subMenuChangeName)
+//     .addSubMenu(submenuEditor)
+//     .addSeparator()
+//     // .addSubMenu(subMenuDelete)
+//     // .addToUi()
+// }
+
+// // function setGUIs(nameCalendar) {
+//   function setGUIs() {
+//   setGuiManage()
+//   setGUISync()
+
+// }
 
 //// Zet hierin ook die begindatumachtigtorrie aii danku ! EN add by the onselectchange!
 
@@ -1209,6 +1213,7 @@ setGUISync()
 
  function onOpen(e) {
 
+   setGUISync()
    // set veriables for Calendar function
 
     // Set date DeleFrom and DeleteTo on the current date, such that those cell are not empty, thus the onOpenTrigger works properly
@@ -1216,13 +1221,13 @@ setGUISync()
    // spreadsheetevents.getRange(cellDeleFrom).setValue(deleDay);
   //  spreadsheetevents.getRange(cellDeleTo).setValue(deleDay);
  // setGUI zodra de spreadsheet geopend wordt. LET OP; DE E TUSSEN HAAKJES MOET BLIJVEN STAAN !!!!
-setGUIs()
+  
  // functioneel ivm evt verkeerd omtunen van de kalendar naam 
-createsheet()
+// createsheet()
 // Understanding things are for the changing tabs onselectionchange:
-  var prop = PropertiesService.getScriptProperties();
-  var sheetName = e.range.getSheet().getSheetName();
-  prop.setProperty("previousSheet", sheetName);
+  // var prop = PropertiesService.getScriptProperties();
+  // var sheetName = e.range.getSheet().getSheetName();
+  // prop.setProperty("previousSheet", sheetName);
    }
 
 
@@ -1246,68 +1251,68 @@ SpreadsheetApp.getActiveSheet().getRange(rowDV,collumnDV).setDataValidation(dv);
 
 
 
-function onEdit(e) {
+// function onEdit(e) {
 
 
-   var range = e.range;
-   var rangeA1 = range.getA1Notation();
-   var rangevalue = range.getValue();
-   var rangeCollumn = e.range.getColumn();
-   var rangeRow = e.range.getRow();
+//    var range = e.range;
+//    var rangeA1 = range.getA1Notation();
+//    var rangevalue = range.getValue();
+//    var rangeCollumn = e.range.getColumn();
+//    var rangeRow = e.range.getRow();
      
-  // CHanging Delete from:
-  if(rangeA1 == "B2") {
+//   // CHanging Delete from:
+//   if(rangeA1 == "B2") {
 
-    var fomatteddateFrom  = Utilities.formatDate(rangevalue, timeZone,"dd-MM-yyyy");
-    var fromDatestring = fomatteddateFrom.substring(0,10);
+//     var fomatteddateFrom  = Utilities.formatDate(rangevalue, timeZone,"dd-MM-yyyy");
+//     var fromDatestring = fomatteddateFrom.substring(0,10);
 
-    setGUIs
-    setformatofDelete()
-    SpreadsheetApp.getActiveSpreadsheet().toast("Changed the first date to delete into: "  + fromDatestring); 
+//     setGUIs
+//     setformatofDelete()
+//     SpreadsheetApp.getActiveSpreadsheet().toast("Changed the first date to delete into: "  + fromDatestring); 
   
-}
+// }
 
-//CHanging Delete To:
-if(rangeA1 == "D2") {
+// //CHanging Delete To:
+// if(rangeA1 == "D2") {
  
-    var fomatteddateTo  = Utilities.formatDate(rangevalue, timeZone,"dd-MM-yyyy");
-    var toDatestring = fomatteddateTo.substring(0,10);
+//     var fomatteddateTo  = Utilities.formatDate(rangevalue, timeZone,"dd-MM-yyyy");
+//     var toDatestring = fomatteddateTo.substring(0,10);
 
-    setGUIs()
-    setformatofDelete()
-    SpreadsheetApp.getActiveSpreadsheet().toast("Changed the last date to delete into: "  + toDatestring );   
-  }
+//     setGUIs()
+//     setformatofDelete()
+//     SpreadsheetApp.getActiveSpreadsheet().toast("Changed the last date to delete into: "  + toDatestring );   
+//   }
 
-// Changing Calendar name
-if (rangeA1 == "B1"){
-  createsheet()
-  setGUIs()
+// // Changing Calendar name
+// if (rangeA1 == "B1"){
+//   createsheet()
+//   setGUIs()
   
-}
+// }
 
-if (rangeCollumn == 8) {
+// if (rangeCollumn == 8) {
 
-var rowtaget = rangeRow+1;
-var collumntaget = rangeCollumn; 
-setDV(rowtaget, collumntaget)
-}
-    }
+// var rowtaget = rangeRow+1;
+// var collumntaget = rangeCollumn; 
+// setDV(rowtaget, collumntaget)
+// }
+//     }
 
 /// On selection change werkt !!!! Vraag niet hoe, maar het werkt. VUl toe te voegen dingen toe onder IF statement (niet in !!!)
 
-function onSelectionChange(e) {
-  const prop = PropertiesService.getScriptProperties();
-  const previousSheet = prop.getProperty("previousSheet");
-  const range = e.range;
-  const sheet = e.range.getSheet();
-  const nameCalendar = sheet.getRange(1,2).getValue();
-  const a1Notation = range.getA1Notation();
-  const sheetName = range.getSheet().getSheetName();
-  if (sheetName == previousSheet) {
-    return;
-    // When the tab is changed, this script is run.  
-  } 
-  prop.setProperty("previousSheet", sheetName);
-  //setGUIs(nameCalendar)
-  setGUIs()  
-}
+// function onSelectionChange(e) {
+//   const prop = PropertiesService.getScriptProperties();
+//   const previousSheet = prop.getProperty("previousSheet");
+//   const range = e.range;
+//   const sheet = e.range.getSheet();
+//   const nameCalendar = sheet.getRange(1,2).getValue();
+//   const a1Notation = range.getA1Notation();
+//   const sheetName = range.getSheet().getSheetName();
+//   if (sheetName == previousSheet) {
+//     return;
+//     // When the tab is changed, this script is run.  
+//   } 
+//   prop.setProperty("previousSheet", sheetName);
+//   //setGUIs(nameCalendar)
+//   setGUIs()  
+// }
